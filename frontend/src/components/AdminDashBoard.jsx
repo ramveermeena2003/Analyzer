@@ -4,6 +4,7 @@ import AdminNavbar from './AdminNavbar.jsx';
 import AdminHome from './AdminHome.jsx';
 import { useLocation } from 'react-router';
 import AllUser from './AllUsers.jsx';
+import AllAdmins from './AllAdmins.jsx';
 
 
 const AdminDashBoard = () => {
@@ -17,7 +18,7 @@ const AdminDashBoard = () => {
       </div>
       <div className='flex gap-10'>
         <AdminSidebar/>
-        {currLocation === "/admin-dashboard" ? <AdminHome/> : <AllUser/>}
+        {currLocation === "/admin-dashboard" ? <AdminHome/> : currLocation === "/all-users" ? <AllUser/> : <AllAdmins/>}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import useAuthUser from '../hooks/useAuthUser'
 import { Link, useLocation } from 'react-router';
-import {HomeIcon,Users,UserIcon} from 'lucide-react';
+import {HomeIcon,Users,UserIcon, Briefcase, ShieldCheck} from 'lucide-react';
 
 const AdminSidebar = () => {
     const { authUser } = useAuthUser();
@@ -19,6 +19,10 @@ const AdminSidebar = () => {
                 <Link to="/all-users" className={`btn btn-ghost justify-start w-full gap-3 normal-case ${currentPath === "/all-users" ? "btn-active" : ""}`}>
                     <Users className='size-5 text-base-content opacity-70' />
                     <span>Users</span>
+                </Link>
+                <Link to="/all-admins" className={`btn btn-ghost justify-start w-full gap-3 normal-case ${currentPath === "/all-admins" ? "btn-active" : ""}`}>
+                    <ShieldCheck className='size-5 text-base-content opacity-70' />
+                    <span>Admins</span>
                 </Link>
             </nav>
 

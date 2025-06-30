@@ -33,6 +33,7 @@ const App = () => {
         <Route path='/user-dashboard' element={isAuthenticated ? <UserDashboard /> : <Navigate to="/" />} />
         <Route path='/admin-dashboard' element={isAuthenticated ? <AdminDashBoard /> : <Navigate to="/" />} />
         <Route path='/all-users' element={isAuthenticated ? <AdminDashBoard /> : <Navigate to='/' />} />
+        <Route path='/all-admins' element={isAuthenticated ? <AdminDashBoard /> : <Navigate to='/' />} />
       </Routes>
 
       <ToastContainer />

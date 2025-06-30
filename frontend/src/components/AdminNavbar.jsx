@@ -1,6 +1,6 @@
 import useAuthUser from '../hooks/useAuthUser'
 import { Link, useLocation } from 'react-router';
-import { ChartNoAxesCombined, History, HomeIcon, LogOutIcon, MenuIcon, MoonIcon, Settings, SunIcon, UserIcon, Users } from 'lucide-react';
+import { ChartNoAxesCombined, History, HomeIcon, LogOutIcon, MenuIcon, MoonIcon, Settings, ShieldCheck, SunIcon, UserIcon, Users } from 'lucide-react';
 import useLogout from '../hooks/useLogout';
 import { useThemeStore } from '../store/useThemeStore';
 
@@ -43,6 +43,11 @@ const Navbar = () => {
               <Link to="/all-users" className={`btn btn-ghost justify-start w-full gap-3 normal-case ${currentPath === "/all-users" ? "btn-active" : ""}`}>
                 <Users className='size-5 text-base-content opacity-70' />
                 <span>Users</span>
+              </Link>
+
+              <Link to="/all-admins" className={`btn btn-ghost justify-start w-full gap-3 normal-case ${currentPath === "/all-admins" ? "btn-active" : ""}`}>
+                <ShieldCheck className='size-5 text-base-content opacity-70' />
+                <span>Admins</span>
               </Link>
             </div>
 

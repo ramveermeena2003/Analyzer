@@ -36,8 +36,23 @@ export const getUsers = async () =>{
     }
 }
 
+export const getAdmins = async () =>{
+    try {
+        const res = await axiosInstance.get("/auth/all-admins");
+        return res.data;
+    } catch (error) {
+        return res.status(500).json({message : "Error while fetching users",error});
+    }
+}
+
 export const deleteUser = async (userId) =>{
     const res = await axiosInstance.delete(`/auth/delete-user/${userId}`);
 
     return res.data;
 };
+
+export const deleteAdmin = async (adminId) => {
+    const res = await axiosInstance.delete(`/auth/delete-admin/${adminId}`);
+
+    return res.data;
+}
