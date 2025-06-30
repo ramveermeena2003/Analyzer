@@ -53,7 +53,6 @@ export async function signup(req, res) {
 export async function login(req, res) {
     try {
         const { email, password, role } = req.body;
-        console.log(role);
         if (role === "User") {
             if (!email || !password) {
                 return res.status(400).json({ message: "All fields are required" });
@@ -80,7 +79,7 @@ export async function login(req, res) {
 
             res.status(200).json({ success: true, user });
         }
-        else {
+        else if (role == "Admin") {
             if (!email || !password) {
                 return res.status(400).json({ message: "All fields are required" });
             }
@@ -116,3 +115,28 @@ export async function logout(req, res) {
     res.clearCookie("jwt");
     res.status(200).json({ success: true, message: "Logout successful" });
 }
+export async function getAllUsers(req, res) {
+    try {
+        const users = await User.find(); // fetch all users from the user Schema
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Error while fetching users", error });
+    }
+};
+
+
+export const deleteUserController = async (req,res) =>{
+    const {id} = req.params;
+
+    try {
+        const deletedUser = await User.findByIdAndDelete(id);
+        if(!deletedUser) {
+            return res.this.status(404).json({message: "User not found"});
+        }
+
+        res.status(200).json({message : "User deleted successfully", deletedUser});
+    } catch (error) {
+        console.log("Error deleting user : ", error);
+        res.status(500).json({message : "Failed to delete user ",error});
+    }
+};

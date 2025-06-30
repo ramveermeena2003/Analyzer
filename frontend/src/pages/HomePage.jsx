@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
     return (
-        <div className="min-h-screen text-gray-800">
+        <div className="min-h-screen bg-black text-gray-800">
             {/* Hero Section */}
             <div className="container bg-black text-white mx-auto px-4 py-20 flex flex-col-reverse lg:flex-row items-center justify-between">
                 {/* Text */}
@@ -31,7 +31,7 @@ const Home = () => {
                 </div>
 
                 {/* Image */}
-                <div className="mb-10 lg:mb-0">
+                <div className="hidden mb-10 lg:block">
                     <img
                         src="./i.png"
                         alt="Data Visualization"

@@ -1,6 +1,6 @@
 import express from "express";
-import { login, logout,signup } from "../controllers/auth.controller.js";
-import { protectRoute } from "../middleware/auth.middleware.js";
+import { deleteUserController, getAllUsers, login, logout,signup } from "../controllers/auth.controller.js";
+import { isAdmin, protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -9,6 +9,11 @@ router.post("/signup",signup)
 router.post("/login",login);
 
 router.post("/logout",logout);
+
+router.get("/all-users",getAllUsers);
+
+router.delete("/delete-user/:id",protectRoute,isAdmin, deleteUserController);
+
 
 router.get("/me", protectRoute, (req, res) => {
   if (req.user) {

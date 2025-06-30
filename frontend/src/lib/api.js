@@ -18,9 +18,26 @@ export const logout = async () => {
 export const getAuthUser = async () =>{
     try {
         const res = await axiosInstance.get("/auth/me");
-        return res.data;
+        if(res.data.admin) return res.data.admin
+        else return res.data.user;
+
     } catch (error) {
         console.log("Error in getAuthUser : ",error);
         return null;
     }
+};
+
+export const getUsers = async () =>{
+    try {
+        const res = await axiosInstance.get("/auth/all-users");
+        return res.data;
+    } catch (error) {
+        return res.status(500).json({message : "Error while fetching users",error});
+    }
+}
+
+export const deleteUser = async (userId) =>{
+    const res = await axiosInstance.delete(`/auth/delete-user/${userId}`);
+
+    return res.data;
 };

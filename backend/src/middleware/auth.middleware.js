@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import Admin from "../models/Admin.js"; // ✅ Import Admin model
+import Admin from "../models/Admin.js";
 
 export const protectRoute = async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ export const protectRoute = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized - Invalid token" });
     }
 
-    // ✅ Check if it's a User or Admin token
+    
     if (decoded.userId) {
       const user = await User.findById(decoded.userId).select("-password");
 
@@ -43,3 +43,9 @@ export const protectRoute = async (req, res, next) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const isAdmin = (req,res,next) => {
+  if(req.admin && req.admin.role === 'admin') next();
+
+  else res.status(403).json({message : "Access denied. Admins only."})
+}
