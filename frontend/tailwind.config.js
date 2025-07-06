@@ -1,4 +1,5 @@
 import daisyui from 'daisyui'
+import { Divide } from 'lucide-react'
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
