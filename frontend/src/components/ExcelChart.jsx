@@ -1,7 +1,6 @@
 // ExcelChart.jsx
 import React, { useRef } from "react";
 import { Bar, Line, Pie } from "react-chartjs-2";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 import {
@@ -34,73 +33,37 @@ ChartJS.register(
 const ExcelChart = ({ chartType, chartData }) => {
   const chartRef = useRef(null);
 
-  const handleDownloadPNG = () => {
+  // Common PNG export function
+  const getChartImage = () => {
     const chart = chartRef.current;
-    if (!chart) return;
+    if (!chart) return null;
 
-    const url = chart.toBase64Image();
+    return chart.toBase64Image(); // returns PNG base64
+  };
+
+  const handleDownloadPNG = () => {
+    const imgURL = getChartImage();
+    if (!imgURL) return;
+
     const link = document.createElement("a");
-    link.href = url;
+    link.href = imgURL;
     link.download = "chart.png";
     link.click();
   };
 
-  // const handleDownloadPDF = async () => {
-  //   const chartCanvas = chartRef.current.canvas;
-  //   const canvas = await html2canvas(chartCanvas);
-  //   const imgData = canvas.toDataURL("image/png");
-
-  //   const pdf = new jsPDF();
-  //   const imgProps = pdf.getImageProperties(imgData);
-  //   const pdfWidth = pdf.internal.pageSize.getWidth();
-  //   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-  //   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-  //   pdf.save("chart.pdf");
-  // };
-
-  const handleDownloadPDF = async () => {
-  const chartWrapper = document.getElementById("chart-container");
-  if (!chartWrapper) return;
-
-  // Clone node without Tailwind styles
-  const clonedNode = chartWrapper.cloneNode(true);
-
-  // Create a clean container
-  const tempContainer = document.createElement("div");
-  tempContainer.style.position = "fixed";
-  tempContainer.style.top = "-10000px";
-  tempContainer.style.left = "-10000px";
-  tempContainer.style.background = "#ffffff"; // ✅ safe background
-  tempContainer.style.color = "#000000";      // ✅ safe text color
-  tempContainer.style.fontFamily = "Arial, sans-serif"; // ✅ safe font
-  tempContainer.appendChild(clonedNode);
-  document.body.appendChild(tempContainer);
-
-  try {
-    const canvas = await html2canvas(tempContainer, {
-      useCORS: true, // in case external fonts/images are used
-    });
-    const imgData = canvas.toDataURL("image/png");
+  const handleDownloadPDF = () => {
+    const imgURL = getChartImage();
+    if (!imgURL) return;
 
     const pdf = new jsPDF();
-    const imgProps = pdf.getImageProperties(imgData);
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    const pdfHeight = pdf.internal.pageSize.getHeight();
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.addImage(imgURL, "PNG", 10, 10, pdfWidth - 20, pdfHeight - 20);
     pdf.save("chart.pdf");
-  } catch (err) {
-    console.error("PDF export failed:", err);
-  } finally {
-    // Clean up the cloned DOM
-    document.body.removeChild(tempContainer);
-  }
-};
+  };
 
-
-
-
-  // Add more vibrant colors for pie charts if missing
+  // Pie chart vibrant colors
   const pieColors = [
     "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0",
     "#9966FF", "#FF9F40", "#8DFF33", "#FF33F6",
@@ -125,7 +88,6 @@ const ExcelChart = ({ chartType, chartData }) => {
 
   const chartProps = {
     data: enhancedChartData,
-    ref: chartRef,
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -138,9 +100,9 @@ const ExcelChart = ({ chartType, chartData }) => {
 
   return (
     <div className="space-y-4 h-[400px]">
-      {chartType === "bar" && <Bar {...chartProps} />}
-      {chartType === "line" && <Line {...chartProps} />}
-      {chartType === "pie" && <Pie {...chartProps} />}
+      {chartType === "bar" && <Bar ref={chartRef} {...chartProps} />}
+      {chartType === "line" && <Line ref={chartRef} {...chartProps} />}
+      {chartType === "pie" && <Pie ref={chartRef} {...chartProps} />}
 
       <div className="flex gap-4 mt-4">
         <button className="btn btn-outline" onClick={handleDownloadPNG}>
