@@ -56,3 +56,18 @@ export const deleteAdmin = async (adminId) => {
 
     return res.data;
 }
+
+export const uploadFileHistory = async (formData) =>{
+    const res = await axiosInstance.post("/file-history/upload",formData);
+    return res;
+}
+
+export const getFileHistory = async () =>{
+    const res = await axiosInstance.get("/file-history");
+    return res.data;
+}
+
+export const deleteFileHistory = async (fileId) =>{
+    const res = axiosInstance.delete(`/file-history/${fileId}`);
+    return res.data;
+}

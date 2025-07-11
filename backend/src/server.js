@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.route.js";
 import { connectDB } from "./lib/db.js";
 
 import excelRoutes from "./routes/excelRoutes.js"
+import fileHistoryRoute from "./routes/fileHistoryRoute.js"
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 app.use("/api/auth",authRoutes);
 app.use("/api/excel",excelRoutes);
+app.use("/api/file-history",fileHistoryRoute)
 
 
 app.listen(PORT, ()=>{

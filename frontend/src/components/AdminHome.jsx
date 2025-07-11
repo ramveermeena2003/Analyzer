@@ -4,6 +4,7 @@ import { BarChart3, Link, ShieldCheck, UploadCloud, Users } from 'lucide-react';
 import useGetAllAdmins from '../hooks/useGetAllAdmins';
 
 const AdminHome = () => {
+
   const { data: users, isLoading, isError, error } = useGetAllUsers();
 
   const {data: admins} = useGetAllAdmins();

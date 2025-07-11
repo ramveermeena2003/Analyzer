@@ -4,7 +4,7 @@ import { ChartNoAxesCombined, History, HomeIcon, LogOutIcon, MenuIcon, MoonIcon,
 import useLogout from '../hooks/useLogout';
 import { useThemeStore } from '../store/useThemeStore';
 
-const Navbar = () => {
+const UserNavbar = () => {
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -31,7 +31,7 @@ const Navbar = () => {
               <MenuIcon className='h-6 w-6' />
             </button>
 
-            <div tabIndex={0} className='dropdown-content mt-2 p-1 shadow-2xl bg-base-200 backdrop-blur-lg rounded-2xl w-56 border border-base-content/10 h-[90vh] overflow-y-auto flex flex-col'>
+            <div tabIndex={0} className='dropdown-content mt-2 p-1 shadow-2xl bg-transparent backdrop-blur-lg rounded-2xl w-56 border border-base-content/10 h-[90vh] overflow-y-auto flex flex-col'>
             
             <div>
 
@@ -40,7 +40,7 @@ const Navbar = () => {
                 <span>Home</span>
               </Link>
 
-              <Link to="/user-dashboard" className={`btn btn-ghost justify-start w-full gap-3 normal-case ${currentPath === "/user-history" ? "btn-active" : ""}`}>
+              <Link to="/user-history" className={`btn btn-ghost justify-start w-full gap-3 normal-case ${currentPath === "/user-history" ? "btn-active" : ""}`}>
                 <History className='size-5 text-base-content opacity-70' />
                 <span>History</span>
               </Link>
@@ -144,4 +144,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default UserNavbar

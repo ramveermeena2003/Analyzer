@@ -1,40 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import ExcelChart from "./ExcelChart";
+import { uploadFileHistory } from "../lib/api";
+import { useLocation } from "react-router-dom";
+
 
 const UserHome = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
   const [parsedData, setParsedData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [xAxisColumn, setXAxisColumn] = useState("");
   const [yAxisColumn, setYAxisColumn] = useState("");
   const [chartType, setChartType] = useState("bar");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const location = useLocation();
 
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const data = new Uint8Array(evt.target.result);
-      const workbook = XLSX.read(data, { type: "array" });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const reanalyzeUrl = params.get("reanalyzeUrl");
+    if (reanalyzeUrl) {
+      fetchAndParseFile(reanalyzeUrl);
+    }
+  }, [location.search]);
+
+  const fetchAndParseFile = async (fileUrl) => {
+    try {
+      const response = await fetch(fileUrl);
+      const arrayBuffer = await response.arrayBuffer();
+
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(sheet);
 
       setParsedData(jsonData);
+
       if (jsonData.length > 0) {
         const cols = Object.keys(jsonData[0]);
         setColumns(cols);
-
-        // ✅ Reset dropdowns
         setXAxisColumn("");
         setYAxisColumn("");
         setChartType("bar");
       }
-    };
-    reader.readAsArrayBuffer(file); // ✅ use this instead of readAsBinaryString
+    } catch (err) {
+      console.error("Failed to parse file for reanalysis:", err);
+    }
   };
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setSelectedFile(file);
+    setUploadSuccess(false);
+    setUploadError(null);
+  };
+
+  const handleFileUpload = async () => {
+    if (!selectedFile) return;
+
+    setIsUploading(true);
+    setUploadError(null);
+    setUploadSuccess(false);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const res = await uploadFileHistory(formData);
+      const data = res.data;
+
+      setUploadSuccess(true);
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const data = new Uint8Array(evt.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+        setParsedData(jsonData);
+
+        if (jsonData.length > 0) {
+          const cols = Object.keys(jsonData[0]);
+          setColumns(cols);
+          setXAxisColumn("");
+          setYAxisColumn("");
+          setChartType("bar");
+        }
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    } catch (err) {
+      setUploadError(err.message || "Upload failed");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const generateChartData = () => {
     if (!parsedData || parsedData.length === 0 || columns.length === 0) return null;
@@ -84,9 +149,18 @@ const UserHome = () => {
       <input
         type="file"
         accept=".xlsx, .xls"
-        onChange={handleFileUpload}
-        className="text-black"
+        onChange={handleFileSelect}
+        className="text-gray-400"
       />
+      <button
+        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        onClick={handleFileUpload}
+        disabled={isUploading}
+      >
+        {isUploading ? "Uploading..." : "Upload"}
+      </button>
+
+      {uploadError && <p className="text-red-400 mt-2">{uploadError}</p>}
 
       {columns.length > 0 && (
         <div className="mt-6 flex flex-wrap gap-4 items-center">
@@ -139,17 +213,11 @@ const UserHome = () => {
         </div>
       )}
 
-      {/* {chartData && (
-        <div className="mt-8">
-          <ExcelChart chartType={chartType} chartData={chartData} />
-        </div>
-      )} */}
       {chartData && (
         <div id="chart-container" className="mt-8 bg-white p-4 rounded-lg">
           <ExcelChart chartType={chartType} chartData={chartData} />
         </div>
       )}
-
     </div>
   );
 };

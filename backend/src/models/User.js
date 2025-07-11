@@ -26,7 +26,17 @@ const userSchema = new mongoose.Schema(
         profilePic : {
             type: String,
             default :"",
-        }
+        },
+        history :[
+            {
+                fileUrl : String,
+                fileName : String,
+                uploadedAt : {
+                    type : Date,
+                    default : Date.now,
+                },
+            },
+        ],
     },
     {timestamps : true}
 );
