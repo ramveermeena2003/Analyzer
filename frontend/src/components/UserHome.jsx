@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import ExcelChart from "./ExcelChart";
-import { uploadFileHistory } from "../lib/api";
+import { uploadChartType, uploadFileHistory } from "../lib/api";
 import { useLocation } from "react-router-dom";
 
 
@@ -11,7 +11,7 @@ const UserHome = () => {
   const [columns, setColumns] = useState([]);
   const [xAxisColumn, setXAxisColumn] = useState("");
   const [yAxisColumn, setYAxisColumn] = useState("");
-  const [chartType, setChartType] = useState("bar");
+  const [chartType, setChartType] = useState("select");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -44,7 +44,7 @@ const UserHome = () => {
         setColumns(cols);
         setXAxisColumn("");
         setYAxisColumn("");
-        setChartType("bar");
+        setChartType("select");
       }
     } catch (err) {
       console.error("Failed to parse file for reanalysis:", err);
@@ -90,7 +90,7 @@ const UserHome = () => {
           setColumns(cols);
           setXAxisColumn("");
           setYAxisColumn("");
-          setChartType("bar");
+          setChartType("select");
         }
       };
       reader.readAsArrayBuffer(selectedFile);
@@ -121,6 +121,8 @@ const UserHome = () => {
         ],
       };
     }
+
+    if (chartType === "select") return null;
 
     if (!xAxisColumn || !yAxisColumn) return null;
 
@@ -203,11 +205,19 @@ const UserHome = () => {
             <select
               className="border rounded px-2 py-1 text-black"
               value={chartType}
-              onChange={(e) => setChartType(e.target.value)}
+              onChange={(e) => {
+                const selectedType = e.target.value;
+                setChartType(selectedType);
+
+                if (selectedType !== "select") {
+                  uploadChartType(selectedType);
+                }
+              }}
             >
-              <option value="bar">Bar</option>
-              <option value="line">Line</option>
-              <option value="pie">Pie</option>
+              <option value="select">Select</option>
+              <option onClick={() => uploadChartType("bar")} value="bar">Bar</option>
+              <option onClick={() => uploadChartType("line")} value="line">Line</option>
+              <option onClick={() => uploadChartType("pie")} value="pie">Pie</option>
             </select>
           </div>
         </div>

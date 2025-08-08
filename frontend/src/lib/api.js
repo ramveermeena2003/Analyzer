@@ -61,6 +61,19 @@ export const uploadFileHistory = async (formData) =>{
     const res = await axiosInstance.post("/file-history/upload",formData);
     return res;
 }
+export const uploadChartType = async (chartType) => {
+    const res = await axiosInstance.post("/excel/update-stats", { chartTypes: chartType });
+    return res;
+}
+export const getStats = async () => {
+  try {
+    const res = await axiosInstance.get("/excel/get-stats");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching stats:", error);
+    return { success: false, message: "Error fetching stats" };
+  }
+};
 
 export const getFileHistory = async () =>{
     const res = await axiosInstance.get("/file-history");

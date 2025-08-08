@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import cloudinary from "../lib/cloudinary.js";
 import User from "../models/User.js";
+import UploadStats from "../models/UploadStats.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -33,6 +34,15 @@ router.post("/upload", protectRoute, upload.single("file"), async (req, res) => 
       fileUrl: result.secure_url,
       fileName: file.originalname,
     });
+
+    let stats = await UploadStats.findOne();
+    if (!stats) {
+      stats = new UploadStats(); // will start with default values (0)
+    }
+    stats.totalUploads += 1;
+    await stats.save();
+
+    
     await user.save();
 
     res.status(200).json({ message: "Uploaded successfully", fileUrl: result.secure_url });

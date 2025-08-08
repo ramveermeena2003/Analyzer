@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 app.use("/api/auth",authRoutes);
 app.use("/api/excel",excelRoutes);
-app.use("/api/file-history",fileHistoryRoute)
+app.use("/api/file-history",fileHistoryRoute);
 
 
 app.listen(PORT, ()=>{

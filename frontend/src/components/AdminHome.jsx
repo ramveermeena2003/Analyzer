@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useGetAllUsers from '../hooks/useGetAllUsers';
-import { BarChart3, Link, ShieldCheck, UploadCloud, Users } from 'lucide-react';
+import { BarChart3, ShieldCheck, UploadCloud, Users } from 'lucide-react';
 import useGetAllAdmins from '../hooks/useGetAllAdmins';
+import { getStats } from '../lib/api';
 
 const AdminHome = () => {
-
   const { data: users, isLoading, isError, error } = useGetAllUsers();
+  const { data: admins } = useGetAllAdmins();
 
-  const {data: admins} = useGetAllAdmins();
+  const [stats, setStats] = useState(null);
 
-  if (isLoading) return (
-    <div className='flex justify-center items-center w-full h-[90vh]'>
+  useEffect(() => {
+    const fetchStats = async () => {
+      const res = await getStats();
+      setStats(res.stats); // backend sends {success, stats}
+    };
+    fetchStats();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className='flex justify-center items-center w-full h-[90vh]'>
         <span className='loading loading-spinner loading-lg'></span>
-    </div>
-  )
-  if (isError) return <p className="text-center mt-10 text-red-500">Error: {error.message}</p>;
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <p className="text-center mt-10 text-red-500">Error: {error.message}</p>;
+  }
 
   return (
     <div className="py-10 px-4 sm:px-6 lg:px-10">
@@ -51,7 +65,7 @@ const AdminHome = () => {
           </div>
           <div>
             <h3 className="text-lg font-medium text-base-content">Total Uploads</h3>
-            <p className="text-2xl font-bold text-base-content">Todo...</p>
+            <p className="text-2xl font-bold text-base-content">{stats?.totalUploads || 0}</p>
           </div>
         </div>
 
@@ -62,9 +76,14 @@ const AdminHome = () => {
           </div>
           <div>
             <h3 className="text-lg font-medium text-base-content">Most Used Chart</h3>
-            <p className="text-2xl font-bold text-base-content">Todo...</p>
+            <p className="text-2xl font-bold text-base-content">
+              {stats
+                ? Object.entries(stats.charts).reduce((a, b) => (a[1] > b[1] ? a : b))[0]
+                : "N/A"}
+            </p>
           </div>
         </div>
+
       </div>
     </div>
   );
