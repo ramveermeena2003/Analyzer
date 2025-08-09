@@ -1,7 +1,7 @@
 import React from 'react';
 import useGetAllUsers from '../hooks/useGetAllUsers';
 import useDeleteUser from '../hooks/useDeleteUser';
-import { Trash2 } from 'lucide-react';
+import { Trash2, UserIcon } from 'lucide-react';
 
 const AllUser = () => {
   const { data: users, isLoading, isError, error } = useGetAllUsers();
@@ -34,11 +34,12 @@ const AllUser = () => {
           >
             {/* Profile & Info */}
             <div className="flex items-center gap-4 flex-1 min-w-[250px]">
-              <img
+              {/* <img
                 src={user.profilePic || "/i.png"}
                 alt="Profile"
                 className="w-14 h-14 rounded-full border"
-              />
+              /> */}
+              <UserIcon className='h-20 w-20 bg-slate-500 mt-1 rounded-full'/>
               <div>
                 <p className="font-semibold text-base">{user.fullName}</p>
                 <p className="text-sm text-base-content/70">{user.email}</p>

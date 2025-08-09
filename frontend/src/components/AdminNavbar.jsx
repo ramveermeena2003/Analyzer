@@ -103,9 +103,11 @@ const Navbar = () => {
             <div tabIndex={0} className='dropdown-content mt-2 p-1 shadow-2xl bg-base-200 backdrop-blur-lg rounded-2xl w-56 border border-base-content/10 max-h-80 overflow-y-auto'>
               {authUser && (
                 <div className='flex flex-col w-full justify-center items-center mb-7'>
-                  <img src={authUser.profilePic || "/i.png"} alt="Profile picture" className='w-20 h-20 rounded-full' />
+                  {/* <img src={authUser.profilePic || "/i.png"} alt="Profile picture" className='w-20 h-20 rounded-full' /> */}
+                  <UserIcon className='h-20 w-20 bg-slate-500 mt-1 rounded-full'/>
                   <p>{authUser.fullName}</p>
                 </div>
+                
               )}
 
               <div>
@@ -124,12 +126,12 @@ const Navbar = () => {
                 </select>
               </div>
 
-              <div>
+              {/* <div>
                 <button className='btn btn-ghost btn-circle'>
                   <Settings className='h-6 w-6 text-base-content opacity-70' />
                 </button>
                 <span className='hover:cursor-pointer'>Change Password</span>
-              </div>
+              </div> */}
 
               <div onClick={logoutMutation}>
                 <button className='btn btn-ghost btn-circle' >

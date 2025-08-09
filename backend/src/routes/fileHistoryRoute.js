@@ -87,7 +87,7 @@ router.delete("/:fileId", protectRoute, async (req, res) => {
 
     res.json({ message: "Deleted successfully" });
   } catch (err) {
-    console.error("🔥 Deletion failed:", err);
+    console.error("Deletion failed:", err);
     res.status(500).json({ message: "Failed to delete file", error: err.message });
   }
 });

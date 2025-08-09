@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useGetAllAdmins from '../hooks/useGetAllAdmins';
-import { Trash2, PlusCircle, EyeIcon, EyeOffIcon, XCircle } from 'lucide-react';
+import { Trash2, PlusCircle, EyeIcon, EyeOffIcon, XCircle, UserIcon } from 'lucide-react';
 import useDeleteAdmin from '../hooks/useDeleteAdmin';
 import useSignUp from '../hooks/useSignUp';
 
@@ -138,11 +138,12 @@ const AllAdmins = () => {
               className="bg-base-200 border border-base-300 rounded-xl shadow-md flex items-center justify-between p-4 flex-wrap"
             >
               <div className="flex items-center gap-4 flex-1 min-w-[250px]">
-                <img
+                {/* <img
                   src={admin.profilePic || "/i.png"}
                   alt="Profile"
                   className="w-14 h-14 rounded-full border"
-                />
+                /> */}
+                <UserIcon className='h-20 w-20 bg-slate-500 mt-1 rounded-full'/>
                 <div>
                   <p className="font-semibold text-base">{admin.fullName}</p>
                   <p className="text-sm text-base-content/70">{admin.email}</p>

@@ -1,6 +1,6 @@
 import useAuthUser from '../hooks/useAuthUser'
 import { Link, useLocation } from 'react-router';
-import { ChartNoAxesCombined, History, HomeIcon, LogOutIcon, MenuIcon, MoonIcon, Settings, SunIcon, UserIcon } from 'lucide-react';
+import { CameraIcon, ChartNoAxesCombined, History, HomeIcon, LogOutIcon, MenuIcon, MoonIcon, Settings, SunIcon, UserIcon } from 'lucide-react';
 import useLogout from '../hooks/useLogout';
 import { useThemeStore } from '../store/useThemeStore';
 
@@ -32,43 +32,43 @@ const UserNavbar = () => {
             </button>
 
             <div tabIndex={0} className='dropdown-content mt-2 p-1 shadow-2xl bg-transparent backdrop-blur-lg rounded-2xl w-56 border border-base-content/10 h-[90vh] overflow-y-auto flex flex-col'>
-            
-            <div>
 
-              <Link to="/user-dashboard" className={`btn btn-ghost justify-start w-full mt-8 gap-3 normal-case ${currentPath === "/user-dashboard" ? "btn-active" : ""}`}>
-                <HomeIcon className='size-5 text-base-content opacity-70' />
-                <span>Home</span>
-              </Link>
+              <div>
 
-              <Link to="/user-history" className={`btn btn-ghost justify-start w-full gap-3 normal-case ${currentPath === "/user-history" ? "btn-active" : ""}`}>
-                <History className='size-5 text-base-content opacity-70' />
-                <span>History</span>
-              </Link>
-            </div>
+                <Link to="/user-dashboard" className={`btn btn-ghost justify-start w-full mt-8 gap-3 normal-case ${currentPath === "/user-dashboard" ? "btn-active" : ""}`}>
+                  <HomeIcon className='size-5 text-base-content opacity-70' />
+                  <span>Home</span>
+                </Link>
+
+                <Link to="/user-history" className={`btn btn-ghost justify-start w-full gap-3 normal-case ${currentPath === "/user-history" ? "btn-active" : ""}`}>
+                  <History className='size-5 text-base-content opacity-70' />
+                  <span>History</span>
+                </Link>
+              </div>
 
               {/* USER PROFILE SECTION */}
-            <div className='p-4 border-t border-base-300 mt-auto'>
+              <div className='p-4 border-t border-base-300 mt-auto'>
                 <div className='flex items-center gap-3'>
-                    <div className='avatar w-6 h-6 '>
-                        {
-                            authUser && authUser.profilePic !== "" ? (
-                                <img src={authUser.profilePic} alt="Profile" />
-                            ) :
-                                (
-                                    <UserIcon className='size-5' />
-                                )
-                        }
+                  <div className='avatar w-6 h-6 '>
+                    {
+                      authUser && authUser.profilePic !== "" ? (
+                        <img src={authUser.profilePic} alt="Profile" />
+                      ) :
+                        (
+                          <UserIcon className='size-5' />
+                        )
+                    }
 
-                    </div>
-                    <div className="flex-1">
-                        <p className='font-semibold text-sm'>{authUser?.fullName}</p>
-                        <p className='text-xs text-success flex items-center gap-1'>
-                            <span className='size-2 rounded-full bg-success inline-block'></span>
-                            Online
-                        </p>
-                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <p className='font-semibold text-sm'>{authUser?.fullName}</p>
+                    <p className='text-xs text-success flex items-center gap-1'>
+                      <span className='size-2 rounded-full bg-success inline-block'></span>
+                      Online
+                    </p>
+                  </div>
                 </div>
-            </div>
+              </div>
 
             </div>
           </div>
@@ -98,8 +98,22 @@ const UserNavbar = () => {
             <div tabIndex={0} className='dropdown-content mt-2 p-1 shadow-2xl bg-base-200 backdrop-blur-lg rounded-2xl w-56 border border-base-content/10 max-h-80 overflow-y-auto'>
               {authUser && (
                 <div className='flex flex-col w-full justify-center items-center mb-7'>
-                  <img src={authUser.profilePic || "/i.png"} alt="Profile picture" className='w-20 h-20 rounded-full' />
-                  <p>{authUser.fullName}</p>
+                  <div className="relative w-20 h-20">
+                    <UserIcon className='h-20 w-20 bg-slate-500 mt-1 rounded-full'/>
+                    {/* <img
+                      src={authUser.profilePic || "/i.png"}
+                      alt="Profile picture"
+                      className='w-20 h-20 rounded-full object-cover border border-base-300'
+                    /> */}
+                    {/* <button
+                      className="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full shadow hover:bg-primary-focus transition"
+                      onClick={() => {handleProfileEdit}}
+                    >
+                      <CameraIcon size={14}/>
+                    </button> */}
+
+                  </div>
+                  <p className="mt-2">{authUser.fullName}</p>
                 </div>
               )}
 
@@ -119,12 +133,12 @@ const UserNavbar = () => {
                 </select>
               </div>
 
-              <div>
+              {/* <div>
                 <button className='btn btn-ghost btn-circle'>
                   <Settings className='h-6 w-6 text-base-content opacity-70' />
                 </button>
                 <span className='hover:cursor-pointer'>Change Password</span>
-              </div>
+              </div> */}
 
               <div onClick={logoutMutation}>
                 <button className='btn btn-ghost btn-circle' >
